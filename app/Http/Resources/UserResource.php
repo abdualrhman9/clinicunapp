@@ -17,6 +17,11 @@ class UserResource extends JsonResource
         return [
             'name'=>$this->name,
             'email'=>$this->email,
+            'role'=>$this->getRole() 
         ];
+    }
+
+    private function getRole(){
+        return $this->roles->count() != 0 ? $this->roles->first()->role : 'patient';
     }
 }

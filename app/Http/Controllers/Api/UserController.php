@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Models\Email;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,14 +20,16 @@ class UserController extends Controller
             'name'=>'required|string|max:255',
             'email'=>'required|email|string|email|max:255|unique:users',
             'password'=>'required|string|min:8|confirmed',
-            'device_name'=>'required|string|min:5'
+            // 'device_name'=>'required|string|min:5'
         ]);
 
         $data['password'] = bcrypt($data['password']);
 
         $user = User::create($data);
 
-        $token = $user->createToken($data['device_name'])->plainTextToken;
+        $this->attachRoleToUser($user);
+
+        $token = $user->createToken('token_name')->plainTextToken;
 
         return response()->json([
             'token'=>$token,
@@ -35,24 +38,47 @@ class UserController extends Controller
         
     }
 
+    private function attachRoleToUser(User $user){
+
+        $doctors = Email::doctors()->get()->pluck('email')->toArray();
+        $admins  = Email::admins()->get()->pluck('email')->toArray();
+
+        $isDoctor = in_array($user->email,$doctors);
+        $isAdmin  = in_array($user->email,$admins);
+
+        if($isDoctor){
+            $user->roles()->attach(3);
+            Email::where('email',$user->email)->get()->first()->delete();
+        }
+
+        if($isAdmin) {
+            $user->roles()->attach(1);
+            Email::where('email',$user->email)->get()->first()->delete();
+        }
+
+        if(!$isAdmin and !$isDoctor)
+            $user->roles()->attach(2);
+        
+    }
+
     public function login(Request $request){
         $data = $request->validate([
             'email'=>'required|email|max:255',
             'password'=>'required|string|min:8',
-            'device_name'=>'required|string|min:8'
+            // 'device_name'=>'required|string'
         ]);
 
         $pass = Auth::attempt(['email'=>$data['email'],'password'=>$data['password']]);
 
         $user = User::where('email',$data['email'])->get()->first();
 
-        $token = $user->createToken($data['device_name']);
+        
 
         if($pass){
+            $token = $user->createToken('token_name');
             return response()->json([
-                'status'=>'success',
                 'user'=>new UserResource($user),
-                'token'=>$token
+                'token'=>$token,
             ]);
         }else {
             return response()->json([
