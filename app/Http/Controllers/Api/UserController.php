@@ -91,10 +91,10 @@ class UserController extends Controller
 
 
     public function logout(Request $request){
-        $data = $request->validate([
-            'device_name'=>'required|string|min:5',
-            'token'=>'required,'
-        ]);
+        // $data = $request->validate([
+        //     'device_name'=>'required|string|min:5',
+        //     'token'=>'required,'
+        // ]);
 
         Auth::user()->tokens()->delete();
 
