@@ -32,6 +32,7 @@ class UserController extends Controller
         $token = $user->createToken('token_name')->plainTextToken;
 
         return response()->json([
+            // 'message'=>'success',
             'token'=>$token,
             'user'=>new UserResource($user),
         ]);
@@ -75,10 +76,11 @@ class UserController extends Controller
         
 
         if($pass){
-            $token = $user->createToken('token_name');
+            $token = $user->createToken('token_name')->plainTextToken;
             return response()->json([
-                'user'=>new UserResource($user),
+                // 'message'=>'success',
                 'token'=>$token,
+                'user'=>new UserResource($user),
             ]);
         }else {
             return response()->json([
