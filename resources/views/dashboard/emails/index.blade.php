@@ -2,13 +2,12 @@
 
 @section('content')
 
-@if(session()->has('message'))
-    <div class="alert alert-success" role="alert">
-        {{ session('message') }}
-    </div>
-@endif
+
 
 <div class="container">
+    @if(session()->has('message'))
+        @include('dashboard.status',['message'=>session('message')])
+    @endif
     <div class="row justify-content-center align-items-center">
         <div class="col-md-8">
             <table class="table">
@@ -28,7 +27,19 @@
                         <td>{{ $key+1 }}</td>
                         <td>{{ $email->email }}</td>
                         <td>{{ $email->role }}</td>
-                        <td><a href="{{ route('dashboard.emails.destroy', $email) }}" class="btn-sm btn-danger"> Delete </a></td>
+                        <td>
+                            <button 
+                            class="btn-sm btn-danger"
+                            onclick="document.getElementById('delete-{{ $email->id }}').submit()"
+                            > Delete </button>
+                            <form 
+                                action="{{ route('dashboard.emails.destroy', $email) }}" 
+                                method="POST" 
+                                id="delete-{{ $email->id }}">
+                                @csrf
+                                @method('delete')
+                            </form>
+                        </td>
                     </tr>
 
                     @endforeach
@@ -37,6 +48,7 @@
                 </tbody>
             </table>
         </div>
+        @include('dashboard.sidebar')
     </div>
 </div>
 

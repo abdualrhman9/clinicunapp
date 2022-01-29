@@ -6,9 +6,7 @@
 
     <div class="container">
         @if(session()->has('message'))
-            <div class="alert alert-success" role="alert">
-                {{ session('message') }}
-            </div>
+            @include('dashboard.status',['message'=>session('message')])
         @endif
 
         <div class="row justify-content-center align-items-center">
@@ -39,6 +37,8 @@
                 
                 </form>
             </div>
+
+            @include('dashboard.sidebar')
         </div>
     </div>
 @endsection

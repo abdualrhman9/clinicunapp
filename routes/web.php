@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EmailController;
+use App\Http\Controllers\Admin\QuestionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +30,10 @@ Route::middleware(['auth','can:show:dashboard'])->prefix('dashboard')->name('das
     Route::get('emails',[EmailController::class,'index'])->name('emails.index');
     Route::get('emails/create',[EmailController::class,'create'])->name('emails.create');
     Route::post('emails',[EmailController::class,'store'])->name('emails.store');
-    Route::post('emails/{email}',[EmailController::class,'destroy'])->name('emails.destroy');
+    Route::delete('emails/{email}',[EmailController::class,'destroy'])->name('emails.destroy');
+
+    Route::resource('questions',QuestionController::class)->only([
+        'index', 'create', 'store'
+    ]);
 
 });

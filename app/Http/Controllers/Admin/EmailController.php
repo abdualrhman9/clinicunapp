@@ -28,6 +28,7 @@ class EmailController extends Controller
 
     public function destroy(Email $email){
         $email->delete();
+        return redirect()->back()->with('message','success deleting email');
     }
 
     private function getData(){
