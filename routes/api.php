@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AnswerController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\UserController;
@@ -28,3 +29,7 @@ Route::get('logout',[UserController::class,'logout'])->middleware('auth:sanctum'
 Route::get('questions',[QuestionController::class,'index'])->middleware(['auth:sanctum']);
 
 Route::get('doctors',[DoctorController::class,'index']);
+
+Route::post('patients/doctors',[DoctorController::class,'attachment'])->middleware(['auth:sanctum']);
+
+Route::post('questions/answers',[AnswerController::class,'store'])->middleware(['auth:sanctum']);;

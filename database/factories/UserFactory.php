@@ -42,6 +42,7 @@ class UserFactory extends Factory
     {
         return $this->afterCreating(function($user){
             $user->createToken('test_token_name');
+            $user->roles()->attach(2);
         });
     }
 }

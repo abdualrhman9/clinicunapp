@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\QuestionResource;
+use App\Models\Answer;
 use App\Models\Question;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class QuestionController extends Controller
 {
@@ -18,9 +21,31 @@ class QuestionController extends Controller
     {
         $this->authorize('viewAny',Question::class);
 
-        $questions = Question::latest()->get();
+        // $questions = Question::latest()->get();
+        if(Auth::user()->answers->count() > 0){
+            $questions = Question::whereHas('answers',function($q){
+                $q
+                ->where('user_id','=',Auth::user()->id)
+                ->where('updated_at','<=',now()->subDay());
+            })->get();
+        }
+        $questions = Question::all();
+        $data = new Collection();
+        foreach($questions as $key=>$question){
+           
+            foreach($question->answers as $sub=>$answer){
+                if( ($answer->user_id == Auth::user()->id and $answer->updated_at <= now()->subDay())  ){
+                    $data->add($question);
+                }
+            }
+           
+            if($question->answers->count()==0){
+                $data->add($question);
+            }
 
-        return response()->json(QuestionResource::collection($questions));
+        }
+        
+        return response()->json($data);
     }
 
     /**

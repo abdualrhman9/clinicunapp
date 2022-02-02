@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -14,14 +15,25 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $data = [
+            'id'=>$this->id,
             'name'=>$this->name,
             'email'=>$this->email,
-            'role'=>$this->getRole() 
+            'role'=>$this->getRole(),
         ];
+        if($this->hasRole('patient'))  { 
+            $data = array_merge($data,
+                ['doctor'=>['id' => $this->doctors->first()->id ?? null,'name' =>    $this->doctors->first()->name ?? null,]]
+            );
+
+        }
+
+        return $data;
     }
 
     private function getRole(){
         return $this->roles->count() != 0 ? $this->roles->first()->role : 'patient';
     }
+
+    
 }

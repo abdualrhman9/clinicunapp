@@ -46,9 +46,15 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
-    // public function doctors(){
-    //     return $this->belongsToMany(Role::class)->wherePivot('role_id',2);
-    // }
+    public function answers(){
+        return $this->hasMany(Answer::class);
+    }
+
+    public function doctors(){
+        return $this->belongsToMany(User::class,'doctor_patient','patient_id','doctor_id');
+    }
+
+    
 
     public function hasRole($search){
         if($this->roles->count() > 0){
@@ -57,5 +63,6 @@ class User extends Authenticatable
             return false;
         }
     }
+
 
 }
