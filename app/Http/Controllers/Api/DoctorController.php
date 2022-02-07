@@ -26,6 +26,10 @@ class DoctorController extends Controller
         return response()->json(UserResource::collection($doctors));
     }
 
+    // public function patients() {
+    //     $patients = User::whereHas
+    // }
+
     public function attachment(Request $request){
         
         $data = $request->validate([

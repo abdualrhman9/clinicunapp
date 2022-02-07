@@ -40,6 +40,7 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create',Message::class);
         if(Auth::user()->doctors->count() == 0)
             return response()->json(['message','Select Doctor First']);
 

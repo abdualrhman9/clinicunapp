@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Message;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -61,9 +62,18 @@ class MessageTest extends TestCase
              'accept'=>'application/json',
              'authorization'=>'Bearer '.$this->token
          ]);
-        dd($response->getContent());
+        // dd($response->getContent());
+        $message = Message::first();
         $response->assertJson([
-            'message'=> 'success'
+            'data'=> [
+                [
+                    'id'=>$message->id,
+                    'message'=>$message->message,
+                    'doctor_id'=>$message->doctor_id,
+                    'patient_id'=>$message->patient_id,
+                    'message_type'=>$message->message_type
+                ]
+            ]
         ]);
     }
 
