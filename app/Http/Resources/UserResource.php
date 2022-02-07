@@ -28,6 +28,15 @@ class UserResource extends JsonResource
 
         }
 
+        // if($this->hasRole('doctor'))  { 
+        //     $data = array_merge($data,
+        //         [
+        //             'patients'=> $this->patients->map
+        //         ]
+        //     );
+
+        // }
+
         return $data;
     }
 
