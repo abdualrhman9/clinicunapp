@@ -54,7 +54,9 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class,'doctor_patient','patient_id','doctor_id');
     }
 
-    
+    public function status(){
+        return $this->hasOne(Status::class);
+    }
 
     public function hasRole($search){
         if($this->roles->count() > 0){

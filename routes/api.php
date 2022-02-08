@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AnswerController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\QuestionController;
+use App\Http\Controllers\Api\StatusController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -37,4 +38,6 @@ Route::post('questions/answers',[AnswerController::class,'store'])->middleware([
 
 Route::post('patients/messages',[MessageController::class,'store'])->middleware(['auth:sanctum']);
 Route::get('patients/messages',[MessageController::class,'index'])->middleware(['auth:sanctum']);
+
+Route::post('patients/status',[StatusController::class,'store'])->middleware(['auth:sanctum']);
 // Route::get('doctors/patients',[DoctorController::class,'index'])->middleware(['auth:sanctum']);
