@@ -16,6 +16,7 @@ class MessageTest extends TestCase
     protected $patient;
     protected $doctor;
     protected $token;
+    protected $dtoken;
     protected function setUp(): void
     {
         parent::setUp();
@@ -24,17 +25,18 @@ class MessageTest extends TestCase
         $this->patient = User::factory()->create();
         $this->doctor = User::factory()->create();
         $this->token = $this->patient->createToken('token_name')->plainTextToken;
+        $this->dtoken = $this->doctor->createToken('token_name')->plainTextToken;
         $this->doctor->roles()->detach(2);
         $this->doctor->roles()->attach(3);
         $re = $this->post('/api/patients/doctors',
-        [
-            'doctor_id'=>$this->doctor->id
-        ],
-        [
-            'accept'=>'application/json',
-            'authorization'=>'Bearer '.$this->token
-        ]
-    );
+            [
+                'doctor_id'=>$this->doctor->id
+            ],
+            [
+                'accept'=>'application/json',
+                'authorization'=>'Bearer '.$this->token
+            ]
+        );
     
     }
 
@@ -57,12 +59,22 @@ class MessageTest extends TestCase
             'accept'=>'application/json',
             'authorization'=>'Bearer '.$this->token
         ]);
+        //Send Message From Doctor
+        $r = $this->post(
+            'api/doctors/patients/messages',
+            array_merge($this->getData(),['message'=>'message doctor message']),
+            [
+                'accept'=>'application/json',
+                'authorization'=>'Bearer '.$this->dtoken
+            ]
+        );
+
 
         $response = $this->get('/api/patients/messages',[
              'accept'=>'application/json',
              'authorization'=>'Bearer '.$this->token
          ]);
-        // dd($response->getContent());
+        dd($response->getContent());
         $message = Message::first();
         $response->assertJson([
             'data'=> [
@@ -75,6 +87,10 @@ class MessageTest extends TestCase
                 ]
             ]
         ]);
+    }
+    /** @test */
+    public function doctor_can_fetch_messages(){
+
     }
 
 

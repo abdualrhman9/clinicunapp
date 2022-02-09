@@ -20,31 +20,19 @@ class QuestionController extends Controller
     public function index()
     {
         $this->authorize('viewAny',Question::class);
-
-        // $questions = Question::latest()->get();
-        if(Auth::user()->answers->count() > 0){
-            $questions = Question::whereHas('answers',function($q){
-                $q
-                ->where('user_id','=',Auth::user()->id)
-                ->where('updated_at','<=',now()->subDay());
-            })->get();
-        }
-        $questions = Question::all();
+        
         $data = new Collection();
-        foreach($questions as $key=>$question){
-           
-            foreach($question->answers as $sub=>$answer){
-                if( ($answer->user_id == Auth::user()->id and $answer->updated_at <= now()->subDay())  ){
+        $questions = Question::all();
+        foreach($questions as $question){
+            foreach($question->answers as $answer){
+                if($answer->user_id == auth()->user()->id and $answer->updated_at <= now()->subDay()){
                     $data->add($question);
                 }
             }
-           
-            if($question->answers->count()==0){
+            if($question->answers->count() == 0 or !auth()->user()->hasAnswers($question)){
                 $data->add($question);
             }
-
         }
-        
         return response()->json($data);
     }
 

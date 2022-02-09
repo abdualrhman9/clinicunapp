@@ -54,6 +54,10 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class,'doctor_patient','patient_id','doctor_id');
     }
 
+    public function patients(){
+        return $this->belongsToMany(User::class,'doctor_patient','doctor_id','patient_id');
+    }
+
     public function status(){
         return $this->hasOne(Status::class);
     }
@@ -64,6 +68,10 @@ class User extends Authenticatable
         }else {
             return false;
         }
+    }
+
+    public function hasAnswers($question){
+        return $question->answers->where('user_id',$this->id)->count() > 0;
     }
 
 

@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Models\User;
 use App\Policies\AttachmentPolicy;
 use App\Policies\DashbordPolicy;
+use App\Policies\DoctorsPolicy;
+use App\Policies\MessagePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -31,5 +33,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('show:dashboard',[DashbordPolicy::class,'show']);
         Gate::define('attached:doctor',[AttachmentPolicy::class,'canAttach']);
+        Gate::define('show-patients',[DoctorsPolicy::class,'viewPatients']);
+        Gate::define('fetch-messages',[MessagePolicy::class,'patientFetchMessages']);
     }
 }

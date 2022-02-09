@@ -78,7 +78,6 @@ class UserController extends Controller
         if($pass){
             $token = $user->createToken('token_name')->plainTextToken;
             return response()->json([
-                // 'message'=>'success',
                 'token'=>$token,
                 'user'=>new UserResource($user),
             ]);
@@ -91,11 +90,6 @@ class UserController extends Controller
 
 
     public function logout(Request $request){
-        // $data = $request->validate([
-        //     'device_name'=>'required|string|min:5',
-        //     'token'=>'required,'
-        // ]);
-
         Auth::user()->tokens()->delete();
 
         return response()->json([

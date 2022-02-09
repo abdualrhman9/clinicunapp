@@ -17,8 +17,9 @@ class MessageController extends Controller
      */
     public function index()
     {
+        
         $messages = Message::where('patient_id',Auth::user()->id)
-            ->where('doctor_id',Auth::user()->doctors->count() != null ? Auth::user()->doctors->first()->id : null )->get();
+            ->where('doctor_id',Auth::user()->doctors->first()->id )->get();
         return MessageResource::collection($messages);
     }
 
@@ -49,7 +50,7 @@ class MessageController extends Controller
             'doctor_id' => 'required|exists:App\Models\User,id',
             'patient_id' => 'required|exists:App\Models\User,id',
         ]);
-        $data['message_type'] = 'sender' ;
+        $data['message_type'] = 'sender';
 
         Message::create($data);
 

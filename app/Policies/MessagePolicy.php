@@ -10,6 +10,11 @@ class MessagePolicy
 {
     use HandlesAuthorization;
 
+
+    public function patientFetchMessages(User $patient){
+        return $patient->hasRole('patient') and $patient->doctors->count() > 0;
+    }
+
     /**
      * Determine whether the user can view any models.
      *
