@@ -2,8 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Question;
-use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AnswerResource extends JsonResource
@@ -19,7 +17,7 @@ class AnswerResource extends JsonResource
         return [
             'id'=>$this->id,
             'answer'=>$this->answer,
-            'question'=>Question::find($this->answer->question_id)->question,
+            'question'=>$this->question->question,
         ];
     }
 }
