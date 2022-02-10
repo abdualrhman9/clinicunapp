@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AnswerResource;
 use App\Http\Resources\MessageResource;
 use App\Http\Resources\UserResource;
 use App\Models\Message;
@@ -58,5 +59,10 @@ class PatientController extends Controller
             'message'=> 'success',
         ]);
 
+    }
+
+    public function getAnswers(User $patient){
+        $answers = $patient->answers;
+        return AnswerResource::collection($answers);
     }
 }

@@ -47,6 +47,8 @@ Route::get('patients/status',[StatusController::class,'getStatus'])->middleware(
 Route::get('doctors/patients/index',[PatientController::class,'index'])->middleware(['auth:sanctum','can:show-patients']);
 Route::get('doctors/patients/{patient}/show',[PatientController::class,'show'])->middleware(['auth:sanctum']);
 
+Route::get('doctors/patients/{patient}/answers',[PatientController::class,'getAnswers'])->middleware(['auth:sanctum']);
+
 //get patient messages for doctor side => conversation
 Route::get('doctors/patients/{patient}/messages',[PatientController::class,'getMessages'])->middleware(['auth:sanctum']);
 //send message from doctor side params=[patient_id,message]
