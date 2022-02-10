@@ -19,7 +19,7 @@ class AnswerResource extends JsonResource
         return [
             'id'=>$this->id,
             'answer'=>$this->answer,
-            'question'=>$this->answer->question,
+            'question'=>Question::find($this->answer->question_id)->question,
         ];
     }
 }
