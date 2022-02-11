@@ -88,6 +88,25 @@ class UserController extends Controller
         }
     }
 
+    public function changePassword(Request $request){
+        $data = $request->validate([
+            'password'=>'required|string|min:8',
+        ]);
+        $data['password'] = bcrypt($data['password']);
+        $user = auth()->user();
+        if($user){
+            $user->tokens()->delete();
+            $user->update(['password'=>$data['password']]);
+            $token = $user->createToken('token_name')->plainTextToken;
+            return response()->json([
+                'token'=>$token,
+                'user'=>new UserResource($user),
+            ]);
+        }
+        else{
+            return response()->json(['message'=>'no user is loged in']);
+        }
+    }
 
     public function logout(Request $request){
         Auth::user()->tokens()->delete();

@@ -20,6 +20,14 @@ class PatientController extends Controller
         ]);
     }
 
+    public function profileData(){
+        $user = auth()->user();
+        return response()->json([
+            'patients'=>$user->patients->count(),
+            'messages'=>Message::where('doctor_id',$user->id)->get()->count(),
+        ]);
+    }
+
     public function show(User $patient) {
         return response()->json([
             'id'=>$patient->id,

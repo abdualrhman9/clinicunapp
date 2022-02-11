@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\StatusController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\PatientController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -53,3 +54,5 @@ Route::get('doctors/patients/{patient}/answers',[PatientController::class,'getAn
 Route::get('doctors/patients/{patient}/messages',[PatientController::class,'getMessages'])->middleware(['auth:sanctum']);
 //send message from doctor side params=[patient_id,message]
 Route::post('doctors/patients/messages',[PatientController::class,'sendMessage'])->middleware(['auth:sanctum']);
+
+Route::post('users/password',[UserController::class,'changePassword'])->middleware(['auth:sanctum']);
