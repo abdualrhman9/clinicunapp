@@ -47,6 +47,7 @@ Route::get('patients/status',[StatusController::class,'getStatus'])->middleware(
 
 Route::get('doctors/patients/index',[PatientController::class,'index'])->middleware(['auth:sanctum','can:show-patients']);
 Route::get('doctors/patients/{patient}/show',[PatientController::class,'show'])->middleware(['auth:sanctum']);
+Route::get('doctors/profile',[PatientController::class,'profileData'])->middleware(['auth:sanctum']);
 
 Route::get('doctors/patients/{patient}/answers',[PatientController::class,'getAnswers'])->middleware(['auth:sanctum']);
 
