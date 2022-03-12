@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\StatusController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\ResultController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -45,11 +46,16 @@ Route::get('patients/messages',[MessageController::class,'index'])->middleware([
 Route::post('patients/status',[StatusController::class,'store'])->middleware(['auth:sanctum']);
 Route::get('patients/status',[StatusController::class,'getStatus'])->middleware(['auth:sanctum']);
 
+Route::post('patients/results',[ResultController::class,'store'])->middleware(['auth:sanctum']);
+Route::get('patients/results',[ResultController::class,'index'])->middleware(['auth:sanctum']);
+
 Route::get('doctors/patients/index',[PatientController::class,'index'])->middleware(['auth:sanctum','can:show-patients']);
 Route::get('doctors/patients/{patient}/show',[PatientController::class,'show'])->middleware(['auth:sanctum']);
 Route::get('doctors/profile',[PatientController::class,'profileData'])->middleware(['auth:sanctum']);
 
 Route::get('doctors/patients/{patient}/answers',[PatientController::class,'getAnswers'])->middleware(['auth:sanctum']);
+
+Route::get('doctors/patients/{patient}/results',[ResultController::class,'indexShow'])->middleware(['auth:sanctum']);
 
 //get patient messages for doctor side => conversation
 Route::get('doctors/patients/{patient}/messages',[PatientController::class,'getMessages'])->middleware(['auth:sanctum']);
@@ -57,3 +63,9 @@ Route::get('doctors/patients/{patient}/messages',[PatientController::class,'getM
 Route::post('doctors/patients/messages',[PatientController::class,'sendMessage'])->middleware(['auth:sanctum']);
 
 Route::post('users/password',[UserController::class,'changePassword'])->middleware(['auth:sanctum']);
+
+Route::get('ut',function(){
+    return response()->json([
+        User::all()
+    ]);
+});

@@ -16,7 +16,9 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         $roles = new RolesSeeder();
         $emails = new EmailSeeder();
+        $users = new UserSeeder();
         $roles->run();
         $emails->run();
+        $users->run();
     }
 }

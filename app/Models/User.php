@@ -62,6 +62,10 @@ class User extends Authenticatable
         return $this->hasOne(Status::class);
     }
 
+    public function results() {
+        return $this->hasMany(Result::class,'patient_id');
+    } 
+    
     public function hasRole($search){
         if($this->roles->count() > 0){
             return $this->roles->first()->role == $search;
